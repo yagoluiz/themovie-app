@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:b="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
+             xmlns:c="clr-namespace:TheMovie.Common.Converters;assembly=TheMovie"
+             x:Class="TheMovie.Views.UpcomingMoviePage"
+             Title="{Binding Title}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <c:ItemTappedEventArgsConverter x:Key="itemTappedEventArgsConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout>
+            <ActivityIndicator
+                IsRunning="{Binding IsLoading}"
+                IsVisible="{Binding IsLoading}" 
+                AbsoluteLayout.LayoutBounds="0.5,0.5,50,50" 
+                AbsoluteLayout.LayoutFlags="PositionProportional" />
+            <SearchBar
+                    Placeholder="{Binding SearchPlaceHolder}"
+                    Text="{Binding SearchText}"
+                    SearchCommand="{Binding SearchCommand}"
+                    IsVisible="{Binding IsSearch}">
+            </SearchBar>
+            <ListView
+		        HasUnevenRows="true"
+                SeparatorVisibility="None"
+                IsPullToRefreshEnabled="True"
+		        ItemsSource="{Binding UpcomingMovies}"
+                RefreshCommand="{Binding UpcomingMovieRefreshCommand}"
+		        IsRefreshing="{Binding IsUpcomingMovieRefresh}">
+                <ListView.Behaviors>
+                    <b:EventToCommandBehavior
+                        EventName="ItemTapped"
+                        Command="{Binding ItemTappedCommand}"
+                        EventArgsConverter="{StaticResource itemTappedEventArgsConverter}" />
+                </ListView.Behaviors>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Frame Padding="0"
+                                   Margin="10, 10, 10, 10">
+                                <StackLayout Orientation="Vertical">
+                                    <Image Source="{Binding PosterPathUrl}"
+                                           Aspect="AspectFill"/>
+                                    <Label Text="{Binding Title}"
+								        Margin="20, 10, 20, 0"
+								        FontAttributes="Bold" 
+                                        FontSize="Medium" />
+                                    <Label Text="{Binding Genres}"
+								        Margin="20, 10, 20, 0"
+                                        TextColor="Silver"
+                                        FontSize="Medium" />
+                                    <Label Text="{Binding ReleaseDate}"
+                                        Margin="20, 5, 20, 15"
+								        FontAttributes="Bold" 
+                                        FontSize="Medium" />
+                                </StackLayout>
+                            </Frame>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
