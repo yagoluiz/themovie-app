@@ -33,6 +33,7 @@ namespace TheMovie
         {
             containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<UpcomingMoviePage, UpcomingMovieViewModel>();
+            containerRegistry.RegisterForNavigation<UpcomingMovieDetailsPage, UpcomingMovieDetailsViewModel>();
         }
 
         private static void RegisterServices(IContainerRegistry containerRegistry)

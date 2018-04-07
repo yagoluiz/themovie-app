@@ -69,10 +69,10 @@ namespace TheMovie.ViewModels
         public UpcomingMovieViewModel(INavigationService navigationService, IMovieService movieService, IGenreService genreService)
             : base(navigationService)
         {
-            Title = "Upcoming Movies";
-            SearchPlaceHolder = "Search for your movie :)";
             _movieService = movieService;
             _genreService = genreService;
+            Title = "Upcoming Movies";
+            SearchPlaceHolder = "Search for your movie :)";
             UpcomingMovies = new ObservableCollection<UpcomingMovieModel>();
             SearchCommand = new Command(ExecuteSearchCommand);
             UpcomingMovieRefreshCommand = new Command(ExecuteUpcomingMovieRefreshCommand);
@@ -126,9 +126,14 @@ namespace TheMovie.ViewModels
             IsUpcomingMovieRefresh = false;
         }
 
-        private void ExecuteItemTappedCommand(UpcomingMovieModel upcomingMovie)
+        private async void ExecuteItemTappedCommand(UpcomingMovieModel upcomingMovie)
         {
-            return;
+            var navigationParams = new NavigationParameters
+            {
+                { "upcomingMovie", upcomingMovie }
+            };
+
+            await NavigationService.NavigateAsync("UpcomingMovieDetailsPage", navigationParams);
         }
     }
 }
