@@ -77,7 +77,7 @@ namespace TheMovie.ViewModels
             _movieService = movieService;
             _genreService = genreService;
             Title = "Upcoming Movies";
-            SearchPlaceHolder = "Search for your movie :)";
+            SearchPlaceHolder = "Search your movie :)";
             UpcomingMovies = new ObservableCollection<UpcomingMovieModel>();
             SearchCommand = new Command(ExecuteSearchCommand);
             UpcomingMovieRefreshCommand = new Command(async () => await ExecuteUpcomingMovieRefreshCommand());
