@@ -2,6 +2,7 @@
 using Prism.Navigation;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using TheMovie.Models;
 using TheMovie.Services;
 using Xamarin.Forms;
@@ -11,6 +12,9 @@ namespace TheMovie.ViewModels
     public class UpcomingMovieViewModel : ViewModelBase
     {
         #region Properties
+
+        private int _pageUpcomingMovies = 1;
+        private bool _isSearchUpcomingMovies = false;
 
         private bool _isLoading;
         public bool IsLoading
@@ -55,6 +59,7 @@ namespace TheMovie.ViewModels
 
         public Command SearchCommand { get; set; }
         public Command UpcomingMovieRefreshCommand { get; set; }
+        public DelegateCommand<UpcomingMovieModel> ItemAppearingCommand { get; set; }
         public DelegateCommand<UpcomingMovieModel> ItemTappedCommand { get; set; }
 
         #endregion
@@ -75,37 +80,55 @@ namespace TheMovie.ViewModels
             SearchPlaceHolder = "Search for your movie :)";
             UpcomingMovies = new ObservableCollection<UpcomingMovieModel>();
             SearchCommand = new Command(ExecuteSearchCommand);
-            UpcomingMovieRefreshCommand = new Command(ExecuteUpcomingMovieRefreshCommand);
+            UpcomingMovieRefreshCommand = new Command(async () => await ExecuteUpcomingMovieRefreshCommand());
+            ItemAppearingCommand = new DelegateCommand<UpcomingMovieModel>(ExecuteItemAppearingCommand);
             ItemTappedCommand = new DelegateCommand<UpcomingMovieModel>(ExecuteItemTappedCommand);
             IsLoading = true;
-            GetUpcomingMovies();
+            InitializeUpcomingMovies();
         }
 
-        private async void GetUpcomingMovies()
+        #region Methods 
+
+        private async Task GetUpcomingMovies(int pageMovie)
         {
-            var genres = await _genreService.GetAll();
-            var movies = await _movieService.GetAll();
+            var movies = await _movieService.GetAll(pageMovie);
+
+            if (movies.UpcomingMovies.Count() > 0)
+            {
+                var genres = await _genreService.GetAll();
+
+                foreach (var movie in movies.UpcomingMovies)
+                {
+                    foreach (var genreId in movie.GenreIds)
+                    {
+                        movie.Genres += $"{genres.GenreMovies.FirstOrDefault(x => x.Id == genreId).Name}\n";
+                    }
+
+                    UpcomingMovies.Add(movie);
+                }
+            }
+        }
+
+        private async void InitializeUpcomingMovies()
+        {
+            IsSearch = true;
 
             UpcomingMovies.Clear();
 
-            foreach (var movie in movies.UpcomingMovies)
-            {
-                foreach (var genreId in movie.GenreIds)
-                {
-
-
-                    movie.Genres += $"{genres.GenreMovies.FirstOrDefault(x => x.Id == genreId).Name}\n";
-                }
-
-                UpcomingMovies.Add(movie);
-            }
+            await GetUpcomingMovies(_pageUpcomingMovies);
 
             IsLoading = false;
-            IsSearch = true;
         }
+
+        #endregion
+
+        #region Methods Commands
 
         private void ExecuteSearchCommand()
         {
+            _isSearchUpcomingMovies = true;
+            _pageUpcomingMovies = 0;
+
             var searchResult = UpcomingMovies.Where(x => x.Title.ToUpper().Contains(SearchText.ToUpper())).ToList();
 
             if (searchResult.Count > 0)
@@ -119,11 +142,30 @@ namespace TheMovie.ViewModels
             }
         }
 
-        private void ExecuteUpcomingMovieRefreshCommand()
+        private async Task ExecuteUpcomingMovieRefreshCommand()
         {
             IsUpcomingMovieRefresh = true;
-            GetUpcomingMovies();
+            _isSearchUpcomingMovies = false;
+
+            UpcomingMovies.Clear();
+
+            _pageUpcomingMovies = 1;
+            await GetUpcomingMovies(_pageUpcomingMovies);
+
             IsUpcomingMovieRefresh = false;
+        }
+
+        private async void ExecuteItemAppearingCommand(UpcomingMovieModel upcomingMovie)
+        {
+            if (_isSearchUpcomingMovies || UpcomingMovies.Count == 0 || !(UpcomingMovies.Last().Equals(upcomingMovie)))
+            {
+                return;
+            }
+            else
+            {
+                _pageUpcomingMovies++;
+                await GetUpcomingMovies(_pageUpcomingMovies);
+            }
         }
 
         private async void ExecuteItemTappedCommand(UpcomingMovieModel upcomingMovie)
@@ -135,5 +177,7 @@ namespace TheMovie.ViewModels
 
             await NavigationService.NavigateAsync("UpcomingMovieDetailsPage", navigationParams);
         }
+
+        #endregion
     }
 }

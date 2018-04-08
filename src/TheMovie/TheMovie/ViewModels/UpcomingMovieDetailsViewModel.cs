@@ -5,7 +5,6 @@ namespace TheMovie.ViewModels
 {
     public class UpcomingMovieDetailsViewModel : ViewModelBase
     {
-
         #region  Properties
 
         private UpcomingMovieModel _upcomingMovie;
@@ -23,9 +22,13 @@ namespace TheMovie.ViewModels
             Title = "Details";
         }
 
+        #region Navigation
+
         public override void OnNavigatedTo(NavigationParameters parameters)
         {
             UpcomingMovie = parameters["upcomingMovie"] as UpcomingMovieModel;
         }
+
+        #endregion
     }
 }

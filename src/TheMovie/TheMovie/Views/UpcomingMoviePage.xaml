@@ -8,6 +8,8 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <c:ItemTappedEventArgsConverter x:Key="itemTappedEventArgsConverter" />
+            <c:ItemAppearingEventArgsConverter x:Key="itemAppearingEventArgsConverter" />
+            <c:StringDateFormatConverter x:Key="stringDateFormatConverter"></c:StringDateFormatConverter>
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
@@ -18,10 +20,10 @@
                 AbsoluteLayout.LayoutBounds="0.5,0.5,50,50" 
                 AbsoluteLayout.LayoutFlags="PositionProportional" />
             <SearchBar
-                    Placeholder="{Binding SearchPlaceHolder}"
-                    Text="{Binding SearchText}"
-                    SearchCommand="{Binding SearchCommand}"
-                    IsVisible="{Binding IsSearch}">
+                Placeholder="{Binding SearchPlaceHolder}"
+                Text="{Binding SearchText}"
+                SearchCommand="{Binding SearchCommand}"
+                IsVisible="{Binding IsSearch}">
             </SearchBar>
             <ListView
 		        HasUnevenRows="true"
@@ -35,27 +37,36 @@
                         EventName="ItemTapped"
                         Command="{Binding ItemTappedCommand}"
                         EventArgsConverter="{StaticResource itemTappedEventArgsConverter}" />
+                    <b:EventToCommandBehavior
+                        EventName="ItemAppearing"
+                        Command="{Binding ItemAppearingCommand}"
+                        EventArgsConverter="{StaticResource itemAppearingEventArgsConverter}"/>
                 </ListView.Behaviors>
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Frame Padding="0"
-                                   Margin="10, 10, 10, 10">
+                            <Frame
+                                Padding="0"
+                                Margin="10, 10, 10, 10">
                                 <StackLayout Orientation="Vertical">
-                                    <Image Source="{Binding PosterPathUrl}"
-                                           Aspect="AspectFill"/>
-                                    <Label Text="{Binding Title}"
+                                    <Image
+                                        Source="{Binding PosterPathUrl}"
+                                        Aspect="AspectFill"/>
+                                    <Label
+                                        Text="{Binding Title}"
 								        Margin="20, 10, 20, 0"
 								        FontAttributes="Bold" 
                                         FontSize="Medium" />
-                                    <Label Text="{Binding Genres}"
+                                    <Label
+                                        Text="{Binding Genres}"
 								        Margin="20, 10, 20, 0"
-                                        TextColor="Silver"
-                                        FontSize="Medium" />
-                                    <Label Text="{Binding ReleaseDate}"
+                                        FontSize="Default" />
+                                    <Label
+                                        Text="{Binding ReleaseDate,
+                                            Converter={StaticResource stringDateFormatConverter}}"
                                         Margin="20, 5, 20, 15"
 								        FontAttributes="Bold" 
-                                        FontSize="Medium" />
+                                        FontSize="Default" />
                                 </StackLayout>
                             </Frame>
                         </ViewCell>

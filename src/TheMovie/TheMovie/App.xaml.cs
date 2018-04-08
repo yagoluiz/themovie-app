@@ -38,8 +38,8 @@ namespace TheMovie
 
         private static void RegisterServices(IContainerRegistry containerRegistry)
         {
-            containerRegistry.Register<IGenreService, GenreService>();
             containerRegistry.Register<IHttpClientService, HttpClientService>();
+            containerRegistry.Register<IGenreService, GenreService>();
             containerRegistry.Register<IMovieService, MovieService>();
         }
     }
