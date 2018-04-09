@@ -11,8 +11,7 @@ namespace TheMovie.Droid
         Icon = "@mipmap/themoviedb_logo",
         Theme = "@style/MainTheme",
         MainLauncher = false,
-        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
-        ScreenOrientation = ScreenOrientation.Portrait)]
+        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle bundle)

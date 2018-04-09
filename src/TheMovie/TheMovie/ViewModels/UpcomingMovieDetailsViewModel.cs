@@ -1,5 +1,4 @@
-﻿using Acr.UserDialogs;
-using Prism.Navigation;
+﻿using Prism.Navigation;
 using Prism.Services;
 using TheMovie.Models;
 
