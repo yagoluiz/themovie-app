@@ -7,26 +7,20 @@
              Title="{Binding Title}">
     <ContentPage.Resources>
         <ResourceDictionary>
-            <c:ItemTappedEventArgsConverter x:Key="itemTappedEventArgsConverter" />
-            <c:ItemAppearingEventArgsConverter x:Key="itemAppearingEventArgsConverter" />
+            <c:ItemTappedEventArgsConverter x:Key="itemTappedEventArgsConverter"/>
+            <c:ItemAppearingEventArgsConverter x:Key="itemAppearingEventArgsConverter"/>
             <c:StringDateFormatConverter x:Key="stringDateFormatConverter"></c:StringDateFormatConverter>
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
-            <ActivityIndicator
-                IsRunning="{Binding IsLoading}"
-                IsVisible="{Binding IsLoading}" 
-                AbsoluteLayout.LayoutBounds="0.5,0.5,50,50" 
-                AbsoluteLayout.LayoutFlags="PositionProportional" />
             <SearchBar
+                Margin="0, 0, 10, 0"
                 Placeholder="{Binding SearchPlaceHolder}"
                 Text="{Binding SearchText}"
-                SearchCommand="{Binding SearchCommand}"
-                IsVisible="{Binding IsSearch}">
-            </SearchBar>
+                SearchCommand="{Binding SearchCommand}"/>
             <ListView
-		        HasUnevenRows="true"
+		        HasUnevenRows="True"
                 SeparatorVisibility="None"
                 IsPullToRefreshEnabled="True"
 		        ItemsSource="{Binding UpcomingMovies}"
@@ -36,7 +30,7 @@
                     <b:EventToCommandBehavior
                         EventName="ItemTapped"
                         Command="{Binding ItemTappedCommand}"
-                        EventArgsConverter="{StaticResource itemTappedEventArgsConverter}" />
+                        EventArgsConverter="{StaticResource itemTappedEventArgsConverter}"/>
                     <b:EventToCommandBehavior
                         EventName="ItemAppearing"
                         Command="{Binding ItemAppearingCommand}"
@@ -54,19 +48,14 @@
                                         Aspect="AspectFill"/>
                                     <Label
                                         Text="{Binding Title}"
-								        Margin="20, 10, 20, 0"
-								        FontAttributes="Bold" 
-                                        FontSize="Medium" />
+                                        Style="{StaticResource layoutLabelCardBoldMedium}"/>
                                     <Label
                                         Text="{Binding Genres}"
-								        Margin="20, 10, 20, 0"
-                                        FontSize="Default" />
+                                        Style="{StaticResource layoutLabelCardDefault}"/>
                                     <Label
                                         Text="{Binding ReleaseDate,
-                                            Converter={StaticResource stringDateFormatConverter}}"
-                                        Margin="20, 5, 20, 15"
-								        FontAttributes="Bold" 
-                                        FontSize="Default" />
+                                               Converter={StaticResource stringDateFormatConverter}}"
+                                        Style="{StaticResource layoutLabelCardBoldDefault}"/>
                                 </StackLayout>
                             </Frame>
                         </ViewCell>

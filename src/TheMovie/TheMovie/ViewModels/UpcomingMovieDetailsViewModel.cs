@@ -1,4 +1,6 @@
-﻿using Prism.Navigation;
+﻿using Acr.UserDialogs;
+using Prism.Navigation;
+using Prism.Services;
 using TheMovie.Models;
 
 namespace TheMovie.ViewModels
@@ -16,8 +18,8 @@ namespace TheMovie.ViewModels
 
         #endregion
 
-        public UpcomingMovieDetailsViewModel(INavigationService navigationService)
-            : base(navigationService)
+        public UpcomingMovieDetailsViewModel(INavigationService navigationService, IPageDialogService pageDialogService)
+            : base(navigationService, pageDialogService)
         {
             Title = "Details";
         }

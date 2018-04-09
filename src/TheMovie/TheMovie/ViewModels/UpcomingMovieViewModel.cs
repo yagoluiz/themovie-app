@@ -1,5 +1,7 @@
-﻿using Prism.Commands;
+﻿using Acr.UserDialogs;
+using Prism.Commands;
 using Prism.Navigation;
+using Prism.Services;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,22 +15,9 @@ namespace TheMovie.ViewModels
     {
         #region Properties
 
-        private int _pageUpcomingMovies = 1;
+        private int _pageUpcomingMovies = 0;
+        private int _totalPagesUpcomingMovies = 0;
         private bool _isSearchUpcomingMovies = false;
-
-        private bool _isLoading;
-        public bool IsLoading
-        {
-            get => _isLoading;
-            set => SetProperty(ref _isLoading, value);
-        }
-
-        private bool _isSearch;
-        public bool IsSearch
-        {
-            get => _isSearch;
-            set => SetProperty(ref _isSearch, value);
-        }
 
         private bool _isUpcomingMovieRefresh;
         public bool IsUpcomingMovieRefresh
@@ -71,30 +60,32 @@ namespace TheMovie.ViewModels
 
         #endregion
 
-        public UpcomingMovieViewModel(INavigationService navigationService, IMovieService movieService, IGenreService genreService)
-            : base(navigationService)
+        public UpcomingMovieViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IMovieService movieService, IGenreService genreService)
+            : base(navigationService, pageDialogService)
         {
             _movieService = movieService;
             _genreService = genreService;
             Title = "Upcoming Movies";
             SearchPlaceHolder = "Search your movie :)";
             UpcomingMovies = new ObservableCollection<UpcomingMovieModel>();
-            SearchCommand = new Command(ExecuteSearchCommand);
+            SearchCommand = new Command(async () => await ExecuteSearchCommand());
             UpcomingMovieRefreshCommand = new Command(async () => await ExecuteUpcomingMovieRefreshCommand());
             ItemAppearingCommand = new DelegateCommand<UpcomingMovieModel>(ExecuteItemAppearingCommand);
             ItemTappedCommand = new DelegateCommand<UpcomingMovieModel>(ExecuteItemTappedCommand);
-            IsLoading = true;
             InitializeUpcomingMovies();
         }
 
         #region Methods 
 
-        private async Task GetUpcomingMovies(int pageMovie)
+        private async Task GetUpcomingMovies(int pageMovie = 1)
         {
             var movies = await _movieService.GetAll(pageMovie);
 
             if (movies.UpcomingMovies.Count() > 0)
             {
+                _pageUpcomingMovies = movies.Page;
+                _totalPagesUpcomingMovies = movies.TotalPages;
+
                 var genres = await _genreService.GetAll();
 
                 foreach (var movie in movies.UpcomingMovies)
@@ -111,23 +102,22 @@ namespace TheMovie.ViewModels
 
         private async void InitializeUpcomingMovies()
         {
-            IsSearch = true;
+            var loading = UserDialogs.Instance.Loading();
 
             UpcomingMovies.Clear();
 
-            await GetUpcomingMovies(_pageUpcomingMovies);
+            await GetUpcomingMovies();
 
-            IsLoading = false;
+            loading.Hide();
         }
 
         #endregion
 
         #region Methods Commands
 
-        private void ExecuteSearchCommand()
+        private async Task ExecuteSearchCommand()
         {
             _isSearchUpcomingMovies = true;
-            _pageUpcomingMovies = 0;
 
             var searchResult = UpcomingMovies.Where(x => x.Title.ToUpper().Contains(SearchText.ToUpper())).ToList();
 
@@ -140,6 +130,11 @@ namespace TheMovie.ViewModels
                     UpcomingMovies.Add(search);
                 }
             }
+            else
+            {
+                await PageDialogService.DisplayAlertAsync("Ooops!", "Movie not found :(", "Ok");
+                return;
+            }
         }
 
         private async Task ExecuteUpcomingMovieRefreshCommand()
@@ -149,22 +144,29 @@ namespace TheMovie.ViewModels
 
             UpcomingMovies.Clear();
 
-            _pageUpcomingMovies = 1;
-            await GetUpcomingMovies(_pageUpcomingMovies);
+            await GetUpcomingMovies();
 
             IsUpcomingMovieRefresh = false;
         }
 
         private async void ExecuteItemAppearingCommand(UpcomingMovieModel upcomingMovie)
         {
-            if (_isSearchUpcomingMovies || UpcomingMovies.Count == 0 || !(UpcomingMovies.Last().Equals(upcomingMovie)))
+            var pagination = _pageUpcomingMovies + 1;
+
+            if (_isSearchUpcomingMovies ||
+                (pagination > _totalPagesUpcomingMovies) ||
+                UpcomingMovies.Count == 0 ||
+                !(UpcomingMovies.Last().Equals(upcomingMovie)))
             {
                 return;
             }
             else
             {
-                _pageUpcomingMovies++;
-                await GetUpcomingMovies(_pageUpcomingMovies);
+                var loading = UserDialogs.Instance.Loading();
+
+                await GetUpcomingMovies(pagination);
+
+                loading.Hide();
             }
         }
 

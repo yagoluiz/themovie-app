@@ -18,28 +18,21 @@
                         Orientation="Vertical">
                         <Image
                             Source="{Binding UpcomingMovie.PosterPathUrl}"
-                            Aspect="AspectFill"/>
+                            Margin="20, 10, 20, 0"
+                            Aspect="AspectFit"/>
                         <Label
                             Text="{Binding UpcomingMovie.Title}"
-						    Margin="20, 10, 20, 0"
-						    FontAttributes="Bold" 
-                            FontSize="Medium" />
+                            Style="{StaticResource layoutLabelCardBoldMedium}"/>
                         <Label
                             Text="{Binding UpcomingMovie.Genres}"
-					        Margin="20, 10, 20, 0"
-                            FontSize="Default" />
+                            Style="{StaticResource layoutLabelCardDefault}"/>
                         <Label
                             Text="{Binding UpcomingMovie.ReleaseDate, 
-                                Converter={StaticResource stringDateFormatConverter}}"
-                            Margin="20, 5, 20, 15"
-					        FontAttributes="Bold" 
-                            FontSize="Default" />
+                                   Converter={StaticResource stringDateFormatConverter}}"
+                            Style="{StaticResource layoutLabelCardBoldDefault}"/>
                         <Label
                             Text="{Binding UpcomingMovie.Overview}"
-                            HorizontalTextAlignment="Start"
-                            VerticalTextAlignment="Start"
-                            Margin="20, 5, 20, 15"
-                            FontSize="Medium" />
+                            Style="{StaticResource layoutLabelCardDescriptionDefault}"/>
                     </StackLayout>
                 </Frame>
             </ScrollView>

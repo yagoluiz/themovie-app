@@ -1,11 +1,11 @@
 ﻿using Prism;
+using Prism.Autofac;
 using Prism.Ioc;
+using TheMovie.Services;
+using TheMovie.ViewModels;
 using TheMovie.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using Prism.Autofac;
-using TheMovie.Services;
-using TheMovie.ViewModels;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace TheMovie

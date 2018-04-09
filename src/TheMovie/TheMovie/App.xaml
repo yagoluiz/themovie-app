@@ -3,9 +3,44 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="clr-namespace:Prism.Autofac;assembly=Prism.Autofac.Forms"
              x:Class="TheMovie.App">
-	<Application.Resources>
+    <Application.Resources>
+        <ResourceDictionary>
 
-		<!-- Application resource dictionary -->
+            <!--#region - Colors -->
 
-	</Application.Resources>
+            <Color x:Key="primary">#27ae60</Color>
+            <Color x:Key="primaryDark">#444445</Color>
+            <Color x:Key="white">#fffff</Color>
+            <Color x:Key="black">#000000</Color>
+
+            <!--#endregion -->
+
+            <!--#region - Common -->
+
+            <Style x:Key="layoutLabelCardDefault" TargetType="Label">
+                <Setter Property="Margin" Value="20, 10, 20, 0" />
+            </Style>
+
+            <Style x:Key="layoutLabelCardBoldDefault" TargetType="Label">
+                <Setter Property="Margin" Value="20, 5, 20, 15" />
+                <Setter Property="FontAttributes" Value="Bold" />
+            </Style>
+
+            <Style x:Key="layoutLabelCardBoldMedium" TargetType="Label">
+                <Setter Property="Margin" Value="20, 10, 20, 0" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="FontSize" Value="Medium" />
+            </Style>
+
+            <Style x:Key="layoutLabelCardDescriptionDefault" TargetType="Label">
+                <Setter Property="Margin" Value="20, 5, 20, 15" />
+                <Setter Property="FontSize" Value="Medium" />
+                <Setter Property="HorizontalTextAlignment" Value="Start" />
+                <Setter Property="VerticalTextAlignment" Value="Start" />
+            </Style>
+
+            <!--#endregion -->
+
+        </ResourceDictionary>
+    </Application.Resources>
 </prism:PrismApplication>
