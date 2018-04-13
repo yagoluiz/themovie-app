@@ -8,10 +8,6 @@ App from movies using API [The Movie DB](https://www.themoviedb.org/documentatio
 
 Library used to deserialize API data return
 
-* Acr.UserDialogs (7.0.1)
-
-Library used to perform page loading
-
 * Prism - Prism.Autofac.Forms (7.0.0.396)
 
 Framework used to use MVVM pattern
@@ -25,5 +21,7 @@ Framework used to use MVVM pattern
 
 ### Atention
 
-* Application not tested on **iOS** :(
+* Application tested on the **iOS Emulator** via [Macincloud](https://www.macincloud.com/)
+* App **iOS** default layout
+* App **Android** custom layout
 * Application that is physically tested on: **Motorola Moto X Play (Android 7.1)**

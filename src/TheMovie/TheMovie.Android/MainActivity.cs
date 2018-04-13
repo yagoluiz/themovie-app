@@ -1,5 +1,4 @@
-﻿using Acr.UserDialogs;
-using Android.App;
+﻿using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using Prism;
@@ -22,8 +21,6 @@ namespace TheMovie.Droid
             base.OnCreate(bundle);
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
-
-            UserDialogs.Init(this);
 
             LoadApplication(new App(new AndroidInitializer()));
         }

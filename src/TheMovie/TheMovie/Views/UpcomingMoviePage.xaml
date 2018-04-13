@@ -19,6 +19,11 @@
                 Placeholder="{Binding SearchPlaceHolder}"
                 Text="{Binding SearchText}"
                 SearchCommand="{Binding SearchCommand}"/>
+            <ActivityIndicator 
+                IsRunning="{Binding IsLoading}"
+                IsVisible="{Binding IsLoading}"
+                HorizontalOptions="CenterAndExpand"
+                VerticalOptions="CenterAndExpand"/>
             <ListView
 		        HasUnevenRows="True"
                 SeparatorVisibility="None"
@@ -62,6 +67,17 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+            <ContentView
+                IsVisible="{Binding IsLoadingUpcomingMovies}"
+                HorizontalOptions="CenterAndExpand"
+                VerticalOptions="CenterAndExpand"
+                AbsoluteLayout.LayoutFlags="All">
+                <ActivityIndicator 
+                    IsRunning="{Binding IsLoadingUpcomingMovies}"
+                    IsVisible="{Binding IsLoadingUpcomingMovies}"
+                    HorizontalOptions="CenterAndExpand"
+                    VerticalOptions="CenterAndExpand"/>
+            </ContentView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

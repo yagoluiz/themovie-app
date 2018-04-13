@@ -1,5 +1,4 @@
-﻿using Acr.UserDialogs;
-using Prism.Commands;
+﻿using Prism.Commands;
 using Prism.Navigation;
 using Prism.Services;
 using System.Collections.ObjectModel;
@@ -24,6 +23,20 @@ namespace TheMovie.ViewModels
         {
             get => _isUpcomingMovieRefresh;
             set => SetProperty(ref _isUpcomingMovieRefresh, value);
+        }
+
+        private bool _isLoading;
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set => SetProperty(ref _isLoading, value);
+        }
+
+        private bool _isLoadingUpcomingMovies;
+        public bool IsLoadingUpcomingMovies
+        {
+            get => _isLoadingUpcomingMovies;
+            set => SetProperty(ref _isLoadingUpcomingMovies, value);
         }
 
         private string _searchPlaceHolder;
@@ -102,13 +115,13 @@ namespace TheMovie.ViewModels
 
         private async void InitializeUpcomingMovies()
         {
-            var loading = UserDialogs.Instance.Loading();
+            IsLoading = true;
 
             UpcomingMovies.Clear();
 
             await GetUpcomingMovies();
 
-            loading.Hide();
+            IsLoading = false;
         }
 
         #endregion
@@ -162,11 +175,11 @@ namespace TheMovie.ViewModels
             }
             else
             {
-                var loading = UserDialogs.Instance.Loading();
+                IsLoadingUpcomingMovies = true;
 
                 await GetUpcomingMovies(pagination);
 
-                loading.Hide();
+                IsLoadingUpcomingMovies = false;
             }
         }
 
