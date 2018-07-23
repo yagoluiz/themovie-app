@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:c="clr-namespace:TheMovie.Common.Converters;assembly=TheMovie"
+             x:Class="TheMovie.Views.UpcomingMovieDetailsPage"
+             Title="{Binding Title}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <c:StringDateFormatConverter x:Key="stringDateFormatConverter"></c:StringDateFormatConverter>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout>
+            <ScrollView>
+                <Frame
+                    Padding="0">
+                    <StackLayout
+                        Orientation="Vertical">
+                        <Image
+                            Source="{Binding UpcomingMovie.PosterPathUrl}"
+                            Margin="20, 10, 20, 0"
+                            Aspect="AspectFit"/>
+                        <Label
+                            Text="{Binding UpcomingMovie.Title}"
+                            Style="{StaticResource layoutLabelCardBoldMedium}"/>
+                        <Label
+                            Text="{Binding UpcomingMovie.Genres}"
+                            Style="{StaticResource layoutLabelCardDefault}"/>
+                        <Label
+                            Text="{Binding UpcomingMovie.ReleaseDate, 
+                                   Converter={StaticResource stringDateFormatConverter}}"
+                            Style="{StaticResource layoutLabelCardBoldDefault}"/>
+                        <Label
+                            Text="{Binding UpcomingMovie.Overview}"
+                            Style="{StaticResource layoutLabelCardDescriptionDefault}"/>
+                    </StackLayout>
+                </Frame>
+            </ScrollView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

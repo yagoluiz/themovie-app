@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:b="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
+             xmlns:c="clr-namespace:TheMovie.Common.Converters;assembly=TheMovie"
+             x:Class="TheMovie.Views.UpcomingMoviePage"
+             Title="{Binding Title}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <c:ItemTappedEventArgsConverter x:Key="itemTappedEventArgsConverter"/>
+            <c:ItemAppearingEventArgsConverter x:Key="itemAppearingEventArgsConverter"/>
+            <c:StringDateFormatConverter x:Key="stringDateFormatConverter"></c:StringDateFormatConverter>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout>
+            <SearchBar
+                Margin="0, 0, 10, 0"
+                Placeholder="{Binding SearchPlaceHolder}"
+                Text="{Binding SearchText}"
+                SearchCommand="{Binding SearchCommand}"/>
+            <ActivityIndicator 
+                IsRunning="{Binding IsLoading}"
+                IsVisible="{Binding IsLoading}"
+                HorizontalOptions="CenterAndExpand"
+                VerticalOptions="CenterAndExpand"/>
+            <ListView
+		        HasUnevenRows="True"
+                SeparatorVisibility="None"
+                IsPullToRefreshEnabled="True"
+		        ItemsSource="{Binding UpcomingMovies}"
+                RefreshCommand="{Binding UpcomingMovieRefreshCommand}"
+		        IsRefreshing="{Binding IsUpcomingMovieRefresh}">
+                <ListView.Behaviors>
+                    <b:EventToCommandBehavior
+                        EventName="ItemTapped"
+                        Command="{Binding ItemTappedCommand}"
+                        EventArgsConverter="{StaticResource itemTappedEventArgsConverter}"/>
+                    <b:EventToCommandBehavior
+                        EventName="ItemAppearing"
+                        Command="{Binding ItemAppearingCommand}"
+                        EventArgsConverter="{StaticResource itemAppearingEventArgsConverter}"/>
+                </ListView.Behaviors>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Frame
+                                Padding="0"
+                                Margin="10, 10, 10, 10">
+                                <StackLayout Orientation="Vertical">
+                                    <Image
+                                        Source="{Binding PosterPathUrl}"
+                                        Aspect="AspectFill"/>
+                                    <Label
+                                        Text="{Binding Title}"
+                                        Style="{StaticResource layoutLabelCardBoldMedium}"/>
+                                    <Label
+                                        Text="{Binding Genres}"
+                                        Style="{StaticResource layoutLabelCardDefault}"/>
+                                    <Label
+                                        Text="{Binding ReleaseDate,
+                                               Converter={StaticResource stringDateFormatConverter}}"
+                                        Style="{StaticResource layoutLabelCardBoldDefault}"/>
+                                </StackLayout>
+                            </Frame>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <ContentView
+                IsVisible="{Binding IsLoadingUpcomingMovies}"
+                HorizontalOptions="CenterAndExpand"
+                VerticalOptions="CenterAndExpand"
+                AbsoluteLayout.LayoutFlags="All">
+                <ActivityIndicator 
+                    IsRunning="{Binding IsLoadingUpcomingMovies}"
+                    IsVisible="{Binding IsLoadingUpcomingMovies}"
+                    HorizontalOptions="CenterAndExpand"
+                    VerticalOptions="CenterAndExpand"/>
+            </ContentView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
